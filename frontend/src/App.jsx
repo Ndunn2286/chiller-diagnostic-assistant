@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "https://chiller-diagnostic-assistant.onrender.com";
 
 const snapshotFields = [
   ["suction_pressure", "Suction Pressure", "number"],
