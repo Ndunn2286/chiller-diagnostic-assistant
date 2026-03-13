@@ -116,6 +116,9 @@ class DiagnoseRequest(BaseModel):
     fault_family_id: str
     answers: Dict[str, Any]
 
+class AutoDiagnoseNoteRequest(BaseModel):
+    note_text: str
+
 class SnapshotRequest(BaseModel):
     suction_pressure: float | None = None
     discharge_pressure: float | None = None
@@ -355,6 +358,38 @@ def diagnose(req: DiagnoseRequest) -> Dict[str, Any]:
 @app.post("/parse-tech-note")
 def parse_note(req: TechNoteRequest) -> Dict[str, Any]:
     return {"extracted": parse_tech_note(req.note_text)}
+
+@app.post("/auto-diagnose-note")
+def auto_diagnose_note(req: AutoDiagnoseNoteRequest) -> Dict[str, Any]:
+    extracted = parse_tech_note(req.note_text)
+
+    snapshot_req = SnapshotRequest(**extracted)
+    snapshot_result = snapshot_match(snapshot_req)
+
+    family = next(
+        (f for f in seed["fault_families"] if f["id"] == snapshot_result["fault_family_id"]),
+        None,
+    )
+
+    if not family:
+        raise HTTPException(status_code=404, detail="Fault family not found.")
+
+    auto_answers: Dict[str, Any] = {}
+
+    for q in family.get("questions", []):
+        var = q["variable_name"]
+        if var in extracted:
+            auto_answers[var] = extracted[var]
+
+    diagnosis = diagnose_family(family, auto_answers)
+
+    return {
+        "note_text": req.note_text,
+        "extracted": extracted,
+        "snapshot_match": snapshot_result,
+        "auto_answers": auto_answers,
+        "diagnosis": diagnosis,
+    }
 
 @app.post("/guided-troubleshoot")
 def guided(req: GuidedRequest) -> Dict[str, Any]:
