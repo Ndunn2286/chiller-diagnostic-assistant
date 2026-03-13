@@ -149,6 +149,9 @@ class FeedbackRequest(BaseModel):
     fault_family_id: str | None = None
     matched_fingerprint: str | None = None
 
+class AutoDiagnoseNoteRequest(BaseModel):
+    note_text: str
+
 def _confidence(score: int) -> str:
     return "High" if score >= 10 else "Medium" if score >= 6 else "Low"
 
@@ -290,6 +293,23 @@ def parse_tech_note(text: str) -> Dict[str, Any]:
         extracted["compressor_running"] = "no"
 
     return extracted
+
+def snapshot_request_from_extracted(extracted: Dict[str, Any]) -> SnapshotRequest:
+    return SnapshotRequest(
+        suction_pressure=extracted.get("suction_pressure"),
+        discharge_pressure=extracted.get("discharge_pressure"),
+        superheat=extracted.get("superheat"),
+        subcooling=extracted.get("subcooling"),
+        leaving_temp=extracted.get("leaving_temp"),
+        return_temp=extracted.get("return_temp"),
+        flow_confirmed=extracted.get("flow_confirmed"),
+        flow_rate=extracted.get("flow_rate"),
+        pump_amps=extracted.get("pump_amps"),
+        ambient_temp=extracted.get("ambient_temp"),
+        fans_running=extracted.get("fans_running"),
+        compressor_running=extracted.get("compressor_running"),
+        glycol_percent=extracted.get("glycol_percent"),
+    )
 
 def _load_feedback() -> list[Dict[str, Any]]:
     if not FEEDBACK_PATH.exists():
@@ -463,6 +483,38 @@ def snapshot_match(req: SnapshotRequest) -> Dict[str, Any]:
         "questions": questions,
         "metrics": metrics,
         "fingerprints": fingerprints,
+    }
+
+@app.post("/auto-diagnose-note")
+def auto_diagnose_note(req: AutoDiagnoseNoteRequest) -> Dict[str, Any]:
+    extracted = parse_tech_note(req.note_text)
+
+    snapshot_req = snapshot_request_from_extracted(extracted)
+    snapshot_result = snapshot_match(snapshot_req)
+
+    family = next(
+        (f for f in seed["fault_families"] if f["id"] == snapshot_result["fault_family_id"]),
+        None,
+    )
+    if not family:
+        raise HTTPException(status_code=404, detail="Fault family not found.")
+
+    auto_answers: Dict[str, Any] = {}
+
+    # map extracted values into likely diagnostic answers where possible
+    for q in family.get("questions", []):
+        var = q["variable_name"]
+        if var in extracted:
+            auto_answers[var] = extracted[var]
+
+    diagnosis = diagnose_family(family, auto_answers)
+
+    return {
+        "note_text": req.note_text,
+        "extracted": extracted,
+        "snapshot_match": snapshot_result,
+        "auto_answers": auto_answers,
+        "diagnosis": diagnosis,
     }
 
 @app.post("/feedback")

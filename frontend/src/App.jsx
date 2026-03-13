@@ -87,6 +87,7 @@ export default function App() {
   const [feedbackStatus, setFeedbackStatus] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [noteDiagnosis, setNoteDiagnosis] = useState(null);
 
   const canDiagnose = useMemo(() => matchResult && matchResult.questions && matchResult.questions.length > 0, [matchResult]);
 
@@ -146,6 +147,35 @@ export default function App() {
     } catch (err) { setError(err.message || "Something went wrong."); }
     finally { setLoading(false); }
   }
+
+async function handleAutoDiagnoseNote() {
+  setLoading(true);
+  setError("");
+
+  try {
+    const res = await fetch(`${API_BASE}/auto-diagnose-note`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ note_text: techNote }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.detail || "Auto diagnose failed");
+
+    setSnapshotValues(data.extracted);
+    setMatchResult(data.snapshot_match);
+    setDiagnosis(data.diagnosis);
+    setNoteDiagnosis(data);
+
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+}
 
   async function handleDiagnose(e) {
     e.preventDefault();
@@ -208,7 +238,13 @@ export default function App() {
               {loading ? "Parsing..." : "Parse Tech Note into Snapshot"}
             </button>
           </div>
-        </section>
+        </section><button
+  type="button"
+  onClick={handleAutoDiagnoseNote}
+  disabled={loading || !techNote.trim()}
+>
+  Auto Diagnose From Tech Note
+</button>
 
         <section className="card">
           <div className="tab-row">
