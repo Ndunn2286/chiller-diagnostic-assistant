@@ -1,0 +1,2193 @@
+{
+  "fault_families": [
+    {
+      "id": "low_flow_pump_fault",
+      "name": "Low Flow / Low Pump Pressure / Pump Fault",
+      "category": "hydronic",
+      "description": "Generic circulation fault family for low flow, flow proving, pump low pressure, and pump fault alarms.",
+      "is_active": true,
+      "manual_basis": "Manual basis: pump running in reverse, valves closed, pump failed/verify pressure, and low flow linkage to low suction/freeze conditions.",
+      "aliases": [
+        {
+          "alias_text": "Low Flow",
+          "normalized_alias": "low flow",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Flow Switch Open",
+          "normalized_alias": "flow switch open",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Flow Proving Fault",
+          "normalized_alias": "flow proving fault",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Pump Fault",
+          "normalized_alias": "pump fault",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Pump Pressure Low",
+          "normalized_alias": "pump pressure low",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Pump Pressure",
+          "normalized_alias": "low pump pressure",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "No Flow",
+          "normalized_alias": "no flow",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Circulation Fault",
+          "normalized_alias": "circulation fault",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Differential Pressure",
+          "normalized_alias": "low differential pressure",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Process Flow Low",
+          "normalized_alias": "process flow low",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Water Flow",
+          "normalized_alias": "low water flow",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Fluid Flow",
+          "normalized_alias": "low fluid flow",
+          "fault_family_id": "low_flow_pump_fault",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        }
+      ],
+      "questions": [
+        {
+          "id": "q_lf_1",
+          "fault_family_id": "low_flow_pump_fault",
+          "question_text": "Is tank level OK?",
+          "variable_name": "tankLevelOk",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": true,
+          "display_order": 1,
+          "is_active": true
+        },
+        {
+          "id": "q_lf_2",
+          "fault_family_id": "low_flow_pump_fault",
+          "question_text": "Air in system?",
+          "variable_name": "airInSystem",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": true,
+          "display_order": 2,
+          "is_active": true
+        },
+        {
+          "id": "q_lf_3",
+          "fault_family_id": "low_flow_pump_fault",
+          "question_text": "Are all relevant valves open?",
+          "variable_name": "valvesOpen",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": true,
+          "display_order": 3,
+          "is_active": true
+        },
+        {
+          "id": "q_lf_4",
+          "fault_family_id": "low_flow_pump_fault",
+          "question_text": "Pump amps",
+          "variable_name": "pumpAmps",
+          "input_type": "number",
+          "unit": "A",
+          "is_required": false,
+          "display_order": 4,
+          "is_active": true
+        },
+        {
+          "id": "q_lf_5",
+          "fault_family_id": "low_flow_pump_fault",
+          "question_text": "Pump inlet pressure",
+          "variable_name": "inletPressure",
+          "input_type": "number",
+          "unit": "psi",
+          "is_required": false,
+          "display_order": 5,
+          "is_active": true
+        },
+        {
+          "id": "q_lf_6",
+          "fault_family_id": "low_flow_pump_fault",
+          "question_text": "Pump outlet pressure",
+          "variable_name": "outletPressure",
+          "input_type": "number",
+          "unit": "psi",
+          "is_required": false,
+          "display_order": 6,
+          "is_active": true
+        }
+      ],
+      "root_causes": [
+        {
+          "id": "lf_loss_of_prime",
+          "fault_family_id": "low_flow_pump_fault",
+          "cause_name": "Loss of prime",
+          "description": "Pump not maintaining a fluid column or suction feed.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "lf_loss_of_prime",
+              "action_text": "Restore tank level.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "lf_loss_of_prime",
+              "action_text": "Re-prime the pump.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "lf_loss_of_prime",
+              "action_text": "Check suction-side leaks or loose fittings.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "tankLevelOk",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "lf_loss_of_prime",
+              "weight": 9,
+              "explanation": "Low tank level strongly supports loss of prime.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "pumpAmps",
+              "operator": "lt",
+              "compare_value": "1",
+              "root_cause_id": "lf_loss_of_prime",
+              "weight": 5,
+              "explanation": "Very low amps suggest the pump is not doing hydraulic work.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "lf_air_in_system",
+          "fault_family_id": "low_flow_pump_fault",
+          "cause_name": "Air in system / cavitation",
+          "description": "Entrained air causing unstable pump feed and poor head.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "lf_air_in_system",
+              "action_text": "Bleed air from the system.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "lf_air_in_system",
+              "action_text": "Inspect suction piping for leaks or turbulence.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "lf_air_in_system",
+              "action_text": "Check NPSH conditions and suction restrictions.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "airInSystem",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "lf_air_in_system",
+              "weight": 8,
+              "explanation": "Air in system strongly supports cavitation or unstable feed.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "inletPressure",
+              "operator": "lt",
+              "compare_value": "0",
+              "root_cause_id": "lf_air_in_system",
+              "weight": 4,
+              "explanation": "Low suction-side pressure can support cavitation or unstable feed.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "lf_closed_valve",
+          "fault_family_id": "low_flow_pump_fault",
+          "cause_name": "Closed or partially closed valve",
+          "description": "Flow restriction due to valve position.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "lf_closed_valve",
+              "action_text": "Verify isolation and process valves are open.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "lf_closed_valve",
+              "action_text": "Check bypass valves and flow path.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "lf_closed_valve",
+              "action_text": "Remove any unintended restrictions.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "valvesOpen",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "lf_closed_valve",
+              "weight": 9,
+              "explanation": "Valve position directly supports a flow restriction.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "valvesOpen",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "lf_closed_valve",
+              "weight": -3,
+              "explanation": "Open valves reduce the likelihood of a valve-position fault.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "lf_reverse_rotation",
+          "fault_family_id": "low_flow_pump_fault",
+          "cause_name": "Reverse pump rotation",
+          "description": "Pump/motor rotating in wrong direction.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "lf_reverse_rotation",
+              "action_text": "Bump motor and verify direction.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "lf_reverse_rotation",
+              "action_text": "Swap leads as needed on 3-phase motors.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "lf_reverse_rotation",
+              "action_text": "Recheck flow and pressure after correction.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "pumpAmps",
+              "operator": "lt",
+              "compare_value": "3",
+              "root_cause_id": "lf_reverse_rotation",
+              "weight": 4,
+              "explanation": "Low-ish amps with poor head can fit reverse rotation on some pump systems.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "lf_damaged_impeller",
+          "fault_family_id": "low_flow_pump_fault",
+          "cause_name": "Damaged impeller / worn pump",
+          "description": "Pump unable to generate expected head.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "lf_damaged_impeller",
+              "action_text": "Inspect pump head generation versus expected.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "lf_damaged_impeller",
+              "action_text": "Disassemble and inspect impeller/wear surfaces.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "lf_damaged_impeller",
+              "action_text": "Repair or replace pump as needed.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "outletPressure",
+              "operator": "lt",
+              "compare_value": "10",
+              "root_cause_id": "lf_damaged_impeller",
+              "weight": 6,
+              "explanation": "Low outlet pressure supports poor head generation.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "lf_plugged_strainer",
+          "fault_family_id": "low_flow_pump_fault",
+          "cause_name": "Plugged strainer / suction restriction",
+          "description": "Restriction starving the pump or circuit.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "lf_plugged_strainer",
+              "action_text": "Inspect and clean strainers.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "lf_plugged_strainer",
+              "action_text": "Check suction-side restrictions.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "lf_plugged_strainer",
+              "action_text": "Retest flow and pressure after cleaning.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "flowConfirmed",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "lf_plugged_strainer",
+              "weight": 5,
+              "explanation": "No flow condition supports restriction or blockage.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_flow_pump_fault",
+              "question_variable": "outletPressure",
+              "operator": "lt",
+              "compare_value": "10",
+              "root_cause_id": "lf_plugged_strainer",
+              "weight": 4,
+              "explanation": "Low pressure rise can also appear with a severe restriction.",
+              "is_active": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "high_head_pressure",
+      "name": "High Head / High Discharge Pressure",
+      "category": "refrigeration",
+      "description": "Condenser-side high pressure fault family for high head, high discharge, and poor heat rejection alarms.",
+      "is_active": true,
+      "manual_basis": "Manual basis: improper condenser cooling, clean air filters, check fan operation, high ambient, ensure adequate clearance, and verify process load.",
+      "aliases": [
+        {
+          "alias_text": "High Head Pressure",
+          "normalized_alias": "high head pressure",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Discharge Pressure",
+          "normalized_alias": "high discharge pressure",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Condensing Pressure",
+          "normalized_alias": "high condensing pressure",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Cond Press High",
+          "normalized_alias": "cond press high",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Head Pressure Alarm",
+          "normalized_alias": "head pressure alarm",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Compressor Discharge",
+          "normalized_alias": "high compressor discharge",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Discharge Temp",
+          "normalized_alias": "high discharge temp",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Condenser Pressure",
+          "normalized_alias": "high condenser pressure",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Condenser Pressure High",
+          "normalized_alias": "condenser pressure high",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Heat Rejection Fault",
+          "normalized_alias": "heat rejection fault",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Compression Ratio",
+          "normalized_alias": "high compression ratio",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Head",
+          "normalized_alias": "high head",
+          "fault_family_id": "high_head_pressure",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        }
+      ],
+      "questions": [
+        {
+          "id": "q_hh_1",
+          "fault_family_id": "high_head_pressure",
+          "question_text": "Ambient temperature at condenser",
+          "variable_name": "ambientTemp",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": false,
+          "display_order": 1,
+          "is_active": true
+        },
+        {
+          "id": "q_hh_2",
+          "fault_family_id": "high_head_pressure",
+          "question_text": "Are condenser fans running?",
+          "variable_name": "fansRunning",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": true,
+          "display_order": 2,
+          "is_active": true
+        },
+        {
+          "id": "q_hh_3",
+          "fault_family_id": "high_head_pressure",
+          "question_text": "Is condenser clean?",
+          "variable_name": "condenserClean",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": true,
+          "display_order": 3,
+          "is_active": true
+        },
+        {
+          "id": "q_hh_4",
+          "fault_family_id": "high_head_pressure",
+          "question_text": "Subcooling",
+          "variable_name": "subcooling",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": false,
+          "display_order": 4,
+          "is_active": true
+        },
+        {
+          "id": "q_hh_5",
+          "fault_family_id": "high_head_pressure",
+          "question_text": "Is condenser water/air flow confirmed?",
+          "variable_name": "condenserFlowOk",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 5,
+          "is_active": true
+        },
+        {
+          "id": "q_hh_6",
+          "fault_family_id": "high_head_pressure",
+          "question_text": "Adequate clearance around unit?",
+          "variable_name": "clearanceOk",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 6,
+          "is_active": true
+        }
+      ],
+      "root_causes": [
+        {
+          "id": "hh_dirty_condenser",
+          "fault_family_id": "high_head_pressure",
+          "cause_name": "Dirty or blocked condenser",
+          "description": "Poor heat rejection from fouled coil or blockage.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "hh_dirty_condenser",
+              "action_text": "Clean condenser coil or condenser bundle.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "hh_dirty_condenser",
+              "action_text": "Remove debris from coil face and filters.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "hh_dirty_condenser",
+              "action_text": "Retest head pressure after cleaning.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "condenserClean",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "hh_dirty_condenser",
+              "weight": 9,
+              "explanation": "Dirty condenser is a common direct cause of high head.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "condenserClean",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "hh_dirty_condenser",
+              "weight": -3,
+              "explanation": "Clean coil reduces likelihood of dirty-condenser diagnosis.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "hh_fan_failure",
+          "fault_family_id": "high_head_pressure",
+          "cause_name": "Condenser fan / airflow failure",
+          "description": "Fan off, wrong direction, or poor airflow.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "hh_fan_failure",
+              "action_text": "Verify fan operation and rotation.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "hh_fan_failure",
+              "action_text": "Check fan motors, contactors, drives, and safeties.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "hh_fan_failure",
+              "action_text": "Confirm condenser airflow/waterflow is restored.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "fansRunning",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "hh_fan_failure",
+              "weight": 9,
+              "explanation": "No fan operation strongly supports an airflow failure.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "condenserFlowOk",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "hh_fan_failure",
+              "weight": 6,
+              "explanation": "Poor condenser-side flow strongly supports airflow/waterflow issues.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "fansRunning",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "hh_fan_failure",
+              "weight": -3,
+              "explanation": "Running fans reduce likelihood of primary fan failure.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "hh_high_ambient",
+          "fault_family_id": "high_head_pressure",
+          "cause_name": "High ambient / high condenser inlet temp",
+          "description": "Environmental condition limiting heat rejection.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "hh_high_ambient",
+              "action_text": "Measure ambient or entering condenser-water temperature.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "hh_high_ambient",
+              "action_text": "Confirm conditions are within design range.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "hh_high_ambient",
+              "action_text": "Reduce external heat load if possible.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "ambientTemp",
+              "operator": "gt",
+              "compare_value": "95",
+              "root_cause_id": "hh_high_ambient",
+              "weight": 6,
+              "explanation": "High ambient temperature increases condenser pressure.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "hh_recirculation",
+          "fault_family_id": "high_head_pressure",
+          "cause_name": "Air recirculation / poor clearance",
+          "description": "Hot discharge air re-entering condenser intake.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "hh_recirculation",
+              "action_text": "Verify unit clearances.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "hh_recirculation",
+              "action_text": "Check for hot-air recirculation paths.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "hh_recirculation",
+              "action_text": "Improve ducting, spacing, or ventilation.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "clearanceOk",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "hh_recirculation",
+              "weight": 7,
+              "explanation": "Poor clearance can recirculate hot air back into the coil.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "hh_overcharge",
+          "fault_family_id": "high_head_pressure",
+          "cause_name": "Refrigerant overcharge",
+          "description": "Excess refrigerant backing up liquid in condenser.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "hh_overcharge",
+              "action_text": "Verify subcooling against expected range.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "hh_overcharge",
+              "action_text": "Review service history for recent charge changes.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "hh_overcharge",
+              "action_text": "Recover/adjust charge only after confirming diagnosis.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "subcooling",
+              "operator": "gt",
+              "compare_value": "20",
+              "root_cause_id": "hh_overcharge",
+              "weight": 6,
+              "explanation": "High subcooling supports backed-up liquid or overcharge.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "hh_non_condensables",
+          "fault_family_id": "high_head_pressure",
+          "cause_name": "Non-condensables / condenser-side abnormality",
+          "description": "Gas contamination or condenser-side abnormality.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "hh_non_condensables",
+              "action_text": "Compare operating pressures to expected conditions.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "hh_non_condensables",
+              "action_text": "Review evacuation and charging history.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "hh_non_condensables",
+              "action_text": "Recover, evacuate, and recharge if confirmed.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "subcooling",
+              "operator": "gt",
+              "compare_value": "20",
+              "root_cause_id": "hh_non_condensables",
+              "weight": 2,
+              "explanation": "High head with high subcooling can still include condenser-side abnormality.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "high_head_pressure",
+              "question_variable": "ambientTemp",
+              "operator": "lt",
+              "compare_value": "75",
+              "root_cause_id": "hh_non_condensables",
+              "weight": 3,
+              "explanation": "High head at low ambient raises suspicion of non-condensables or charge issue.",
+              "is_active": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "low_suction_low_charge",
+      "name": "Low Suction / Low Charge / Starved Evaporator",
+      "category": "refrigeration",
+      "description": "Low-side refrigeration fault family for low suction, low charge, starvation, and liquid feed restriction alarms.",
+      "is_active": true,
+      "manual_basis": "Manual basis: low suction tied to low flow, low load, and temperature below fluid freeze point; expanded with generic low-charge and restriction patterns for cross-manufacturer use.",
+      "aliases": [
+        {
+          "alias_text": "Low Suction Pressure",
+          "normalized_alias": "low suction pressure",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Refrigerant Pressure",
+          "normalized_alias": "low refrigerant pressure",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Charge",
+          "normalized_alias": "low charge",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Refrigerant",
+          "normalized_alias": "low refrigerant",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Starved Evaporator",
+          "normalized_alias": "starved evaporator",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Evap Pressure",
+          "normalized_alias": "low evap pressure",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Suction Pressure Low",
+          "normalized_alias": "suction pressure low",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Pressure Alarm",
+          "normalized_alias": "low pressure alarm",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Suction",
+          "normalized_alias": "low suction",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Superheat Alarm",
+          "normalized_alias": "low superheat alarm",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Loss of Refrigerant",
+          "normalized_alias": "loss of refrigerant",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Side Pressure Low",
+          "normalized_alias": "low side pressure low",
+          "fault_family_id": "low_suction_low_charge",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        }
+      ],
+      "questions": [
+        {
+          "id": "q_ls_1",
+          "fault_family_id": "low_suction_low_charge",
+          "question_text": "Suction pressure",
+          "variable_name": "suctionPressure",
+          "input_type": "number",
+          "unit": "psi",
+          "is_required": false,
+          "display_order": 1,
+          "is_active": true
+        },
+        {
+          "id": "q_ls_2",
+          "fault_family_id": "low_suction_low_charge",
+          "question_text": "Superheat",
+          "variable_name": "superheat",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": false,
+          "display_order": 2,
+          "is_active": true
+        },
+        {
+          "id": "q_ls_3",
+          "fault_family_id": "low_suction_low_charge",
+          "question_text": "Subcooling",
+          "variable_name": "subcooling",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": false,
+          "display_order": 3,
+          "is_active": true
+        },
+        {
+          "id": "q_ls_4",
+          "fault_family_id": "low_suction_low_charge",
+          "question_text": "Bubbles in sight glass?",
+          "variable_name": "sightGlassBubbles",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 4,
+          "is_active": true
+        },
+        {
+          "id": "q_ls_5",
+          "fault_family_id": "low_suction_low_charge",
+          "question_text": "Adequate process load present?",
+          "variable_name": "loadPresent",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 5,
+          "is_active": true
+        },
+        {
+          "id": "q_ls_6",
+          "fault_family_id": "low_suction_low_charge",
+          "question_text": "Signs of refrigerant leak?",
+          "variable_name": "leakSigns",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 6,
+          "is_active": true
+        }
+      ],
+      "root_causes": [
+        {
+          "id": "ls_low_charge",
+          "fault_family_id": "low_suction_low_charge",
+          "cause_name": "Low refrigerant charge",
+          "description": "System undercharged or depleted.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ls_low_charge",
+              "action_text": "Verify superheat and subcooling pattern.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ls_low_charge",
+              "action_text": "Inspect sight glass and service history.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ls_low_charge",
+              "action_text": "Do not add charge until leak/restriction checks are considered.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "suctionPressure",
+              "operator": "lt",
+              "compare_value": "50",
+              "root_cause_id": "ls_low_charge",
+              "weight": 7,
+              "explanation": "Low suction is the primary symptom of low-side starvation.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "superheat",
+              "operator": "gt",
+              "compare_value": "20",
+              "root_cause_id": "ls_low_charge",
+              "weight": 7,
+              "explanation": "High superheat strongly supports an underfed evaporator.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "subcooling",
+              "operator": "lt",
+              "compare_value": "5",
+              "root_cause_id": "ls_low_charge",
+              "weight": 6,
+              "explanation": "Low subcooling supports low refrigerant inventory.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "sightGlassBubbles",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "ls_low_charge",
+              "weight": 5,
+              "explanation": "Sight glass bubbles may support low liquid feed.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ls_refrigerant_leak",
+          "fault_family_id": "low_suction_low_charge",
+          "cause_name": "Refrigerant leak",
+          "description": "Loss of charge from leak point.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ls_refrigerant_leak",
+              "action_text": "Inspect common leak points.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ls_refrigerant_leak",
+              "action_text": "Use leak detector or soap bubbles as appropriate.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ls_refrigerant_leak",
+              "action_text": "Repair leak before recharging.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "leakSigns",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "ls_refrigerant_leak",
+              "weight": 9,
+              "explanation": "Observed leak signs strongly support charge loss.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ls_liquid_line_restriction",
+          "fault_family_id": "low_suction_low_charge",
+          "cause_name": "Liquid line restriction",
+          "description": "Restricted liquid feed to evaporator.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ls_liquid_line_restriction",
+              "action_text": "Inspect filter dryer and liquid line temperature drop.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ls_liquid_line_restriction",
+              "action_text": "Check for restricted solenoids or valves.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ls_liquid_line_restriction",
+              "action_text": "Replace restricted component if confirmed.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "subcooling",
+              "operator": "gt",
+              "compare_value": "12",
+              "root_cause_id": "ls_liquid_line_restriction",
+              "weight": 5,
+              "explanation": "Normal/high subcooling with starvation supports a restriction.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "superheat",
+              "operator": "gt",
+              "compare_value": "20",
+              "root_cause_id": "ls_liquid_line_restriction",
+              "weight": 5,
+              "explanation": "High superheat can also fit a liquid feed restriction.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ls_metering_issue",
+          "fault_family_id": "low_suction_low_charge",
+          "cause_name": "Metering device / EEV / TXV issue",
+          "description": "Expansion device not feeding properly.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ls_metering_issue",
+              "action_text": "Check TXV/EEV command and operation.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ls_metering_issue",
+              "action_text": "Verify sensor bulbs/probes and control inputs.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ls_metering_issue",
+              "action_text": "Inspect for sticking or failed metering device.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": []
+        },
+        {
+          "id": "ls_low_load",
+          "fault_family_id": "low_suction_low_charge",
+          "cause_name": "Low evaporator load",
+          "description": "Insufficient thermal load driving pressure low.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ls_low_load",
+              "action_text": "Verify actual process load.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ls_low_load",
+              "action_text": "Check whether load is below minimum required.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ls_low_load",
+              "action_text": "Review need for hot gas bypass or control adjustment.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "loadPresent",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "ls_low_load",
+              "weight": 8,
+              "explanation": "Low load is a common alternate explanation for low suction.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "loadPresent",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "ls_low_load",
+              "weight": -3,
+              "explanation": "Confirmed adequate load reduces low-load explanation.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ls_freeze_condition",
+          "fault_family_id": "low_suction_low_charge",
+          "cause_name": "Fluid below freeze point / freeze condition",
+          "description": "Low-side pressure depressed by freezing risk or low fluid temp.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ls_freeze_condition",
+              "action_text": "Verify actual fluid temperature and freeze point.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ls_freeze_condition",
+              "action_text": "Check glycol concentration.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ls_freeze_condition",
+              "action_text": "Inspect for low-flow conditions at evaporator.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "low_suction_low_charge",
+              "question_variable": "suctionPressure",
+              "operator": "lt",
+              "compare_value": "50",
+              "root_cause_id": "ls_freeze_condition",
+              "weight": 3,
+              "explanation": "Low suction can accompany freeze-related low-side conditions.",
+              "is_active": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "freeze_risk",
+      "name": "Freeze Protection / Freeze Point / Low Evap Temp",
+      "category": "refrigeration",
+      "description": "Freeze protection fault family for freeze point reached, low evaporating temperature, and low fluid temperature alarms.",
+      "is_active": true,
+      "manual_basis": "Manual basis: verify glycol mix, compare fluid temperature to freeze point, and investigate low flow / low evaporating conditions.",
+      "aliases": [
+        {
+          "alias_text": "Freeze Protect",
+          "normalized_alias": "freeze protect",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Freeze Point Reached",
+          "normalized_alias": "freeze point reached",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Freeze Alarm",
+          "normalized_alias": "freeze alarm",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Evaporator Temp",
+          "normalized_alias": "low evaporator temp",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Evap Temp",
+          "normalized_alias": "low evap temp",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Fluid Temperature",
+          "normalized_alias": "low fluid temperature",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Freeze Protection Active",
+          "normalized_alias": "freeze protection active",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Evaporator Freeze",
+          "normalized_alias": "evaporator freeze",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Low Leaving Fluid Temp",
+          "normalized_alias": "low leaving fluid temp",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Freeze Risk",
+          "normalized_alias": "freeze risk",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Fluid Below Freeze Point",
+          "normalized_alias": "fluid below freeze point",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        },
+        {
+          "alias_text": "Process Low Temp",
+          "normalized_alias": "process low temp",
+          "fault_family_id": "freeze_risk",
+          "manufacturer": "Generic",
+          "confidence": 9,
+          "is_active": true
+        }
+      ],
+      "questions": [
+        {
+          "id": "q_fr_1",
+          "fault_family_id": "freeze_risk",
+          "question_text": "Leaving fluid temperature",
+          "variable_name": "leavingFluidTemp",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": true,
+          "display_order": 1,
+          "is_active": true
+        },
+        {
+          "id": "q_fr_2",
+          "fault_family_id": "freeze_risk",
+          "question_text": "Freeze protection setpoint",
+          "variable_name": "freezeSetpoint",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": true,
+          "display_order": 2,
+          "is_active": true
+        },
+        {
+          "id": "q_fr_3",
+          "fault_family_id": "freeze_risk",
+          "question_text": "Glycol concentration",
+          "variable_name": "glycolPercent",
+          "input_type": "number",
+          "unit": "%",
+          "is_required": false,
+          "display_order": 3,
+          "is_active": true
+        },
+        {
+          "id": "q_fr_4",
+          "fault_family_id": "freeze_risk",
+          "question_text": "Is flow confirmed?",
+          "variable_name": "flowConfirmed",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": true,
+          "display_order": 4,
+          "is_active": true
+        },
+        {
+          "id": "q_fr_5",
+          "fault_family_id": "freeze_risk",
+          "question_text": "Sensor verified against handheld/reference?",
+          "variable_name": "sensorVerified",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 5,
+          "is_active": true
+        },
+        {
+          "id": "q_fr_6",
+          "fault_family_id": "freeze_risk",
+          "question_text": "Low evaporator/suction temperature present?",
+          "variable_name": "lowEvapTemp",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 6,
+          "is_active": true
+        }
+      ],
+      "root_causes": [
+        {
+          "id": "fr_low_glycol",
+          "fault_family_id": "freeze_risk",
+          "cause_name": "Insufficient glycol concentration",
+          "description": "Freeze point too high for operating condition.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "fr_low_glycol",
+              "action_text": "Measure glycol concentration with refractometer.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "fr_low_glycol",
+              "action_text": "Compare to target freeze protection.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "fr_low_glycol",
+              "action_text": "Adjust mixture to safe operating concentration.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "glycolPercent",
+              "operator": "lt",
+              "compare_value": "20",
+              "root_cause_id": "fr_low_glycol",
+              "weight": 9,
+              "explanation": "Low glycol concentration raises true freeze risk.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "glycolPercent",
+              "operator": "gte",
+              "compare_value": "25",
+              "root_cause_id": "fr_low_glycol",
+              "weight": -4,
+              "explanation": "Adequate glycol reduces low-glycol explanation.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "fr_low_flow",
+          "fault_family_id": "freeze_risk",
+          "cause_name": "Low flow across evaporator",
+          "description": "Localized freezing due to weak circulation.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "fr_low_flow",
+              "action_text": "Verify pump operation and flow path.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "fr_low_flow",
+              "action_text": "Check valves, strainers, and DP.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "fr_low_flow",
+              "action_text": "Restore proper evaporator flow before reset.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "flowConfirmed",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "fr_low_flow",
+              "weight": 9,
+              "explanation": "No confirmed flow strongly supports localized freezing risk.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "flowConfirmed",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "fr_low_flow",
+              "weight": -3,
+              "explanation": "Confirmed flow reduces low-flow explanation.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "fr_sensor_error",
+          "fault_family_id": "freeze_risk",
+          "cause_name": "Temperature sensor misread",
+          "description": "Bad or unverified reading causing nuisance freeze alarm.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "fr_sensor_error",
+              "action_text": "Verify reading with a calibrated reference.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "fr_sensor_error",
+              "action_text": "Inspect wiring and sensor mounting.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "fr_sensor_error",
+              "action_text": "Replace/recalibrate sensor if needed.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "sensorVerified",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "fr_sensor_error",
+              "weight": 7,
+              "explanation": "Unverified sensor reading raises suspicion of nuisance freeze alarm.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "sensorVerified",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "fr_sensor_error",
+              "weight": -3,
+              "explanation": "Verified sensor reduces sensor-fault likelihood.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "fr_aggressive_setpoint",
+          "fault_family_id": "freeze_risk",
+          "cause_name": "Freeze setpoint too aggressive",
+          "description": "Control setting too close to actual operating limit.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "fr_aggressive_setpoint",
+              "action_text": "Review freeze protection setting.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "fr_aggressive_setpoint",
+              "action_text": "Compare setpoint to real operating margin.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "fr_aggressive_setpoint",
+              "action_text": "Adjust settings if application allows.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "freezeSetpoint",
+              "operator": "gt",
+              "compare_value": "34",
+              "root_cause_id": "fr_aggressive_setpoint",
+              "weight": 5,
+              "explanation": "A relatively warm freeze threshold can create nuisance trips depending on application.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "fr_actual_low_temp",
+          "fault_family_id": "freeze_risk",
+          "cause_name": "Actual fluid below freeze threshold",
+          "description": "Fluid truly at or below the safe freeze point.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "fr_actual_low_temp",
+              "action_text": "Confirm actual leaving temperature.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "fr_actual_low_temp",
+              "action_text": "Keep chiller off until freeze risk is cleared.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "fr_actual_low_temp",
+              "action_text": "Restore flow/load/glycol before restart.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "leavingFluidTemp",
+              "operator": "lt",
+              "compare_value": "32",
+              "root_cause_id": "fr_actual_low_temp",
+              "weight": 9,
+              "explanation": "Leaving fluid below freezing strongly supports an actual low-temperature condition.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "lowEvapTemp",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "fr_actual_low_temp",
+              "weight": 5,
+              "explanation": "Low evaporator temperature supports real freeze risk.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "fr_low_load_control",
+          "fault_family_id": "freeze_risk",
+          "cause_name": "Low load / control instability",
+          "description": "Low load or unstable control driving evaporator too cold.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "fr_low_load_control",
+              "action_text": "Verify process load stability.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "fr_low_load_control",
+              "action_text": "Review capacity control and differential settings.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "fr_low_load_control",
+              "action_text": "Check for low-load hunting or unstable control.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "freeze_risk",
+              "question_variable": "lowEvapTemp",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "fr_low_load_control",
+              "weight": 4,
+              "explanation": "Low evaporator temperature can also come from low load or unstable control.",
+              "is_active": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "not_reaching_setpoint",
+      "name": "Not Reaching Setpoint / High Leaving Fluid Temperature",
+      "category": "performance",
+      "description": "Performance fault family for high leaving temperature, poor pull-down, and unable-to-reach-setpoint complaints.",
+      "is_active": true,
+      "manual_basis": "Manual basis: high fluid temperature / high load, restart to pull down, verify compressor/cooling enabled, and review delay / fault settings where relevant.",
+      "aliases": [
+        {
+          "alias_text": "Not Reaching Setpoint",
+          "normalized_alias": "not reaching setpoint",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Leaving Fluid Temperature",
+          "normalized_alias": "high leaving fluid temperature",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "High Fluid Temperature",
+          "normalized_alias": "high fluid temperature",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "Poor Pull Down",
+          "normalized_alias": "poor pull down",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "Unable to Reach Setpoint",
+          "normalized_alias": "unable to reach setpoint",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "Process Temperature High",
+          "normalized_alias": "process temperature high",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "Leaving Temp High",
+          "normalized_alias": "leaving temp high",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "Supply Temp High",
+          "normalized_alias": "supply temp high",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "No Cooling",
+          "normalized_alias": "no cooling",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "Cooling Capacity Low",
+          "normalized_alias": "cooling capacity low",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "Temperature Instability",
+          "normalized_alias": "temperature instability",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        },
+        {
+          "alias_text": "Unit Won't Cool",
+          "normalized_alias": "unit won't cool",
+          "fault_family_id": "not_reaching_setpoint",
+          "manufacturer": "Generic",
+          "confidence": 8,
+          "is_active": true
+        }
+      ],
+      "questions": [
+        {
+          "id": "q_ns_1",
+          "fault_family_id": "not_reaching_setpoint",
+          "question_text": "Setpoint",
+          "variable_name": "setpoint",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": true,
+          "display_order": 1,
+          "is_active": true
+        },
+        {
+          "id": "q_ns_2",
+          "fault_family_id": "not_reaching_setpoint",
+          "question_text": "Leaving fluid temperature",
+          "variable_name": "leavingFluidTemp",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": true,
+          "display_order": 2,
+          "is_active": true
+        },
+        {
+          "id": "q_ns_3",
+          "fault_family_id": "not_reaching_setpoint",
+          "question_text": "Return fluid temperature",
+          "variable_name": "returnFluidTemp",
+          "input_type": "number",
+          "unit": "\u00b0F",
+          "is_required": false,
+          "display_order": 3,
+          "is_active": true
+        },
+        {
+          "id": "q_ns_4",
+          "fault_family_id": "not_reaching_setpoint",
+          "question_text": "Is process flow confirmed?",
+          "variable_name": "flowConfirmed",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 4,
+          "is_active": true
+        },
+        {
+          "id": "q_ns_5",
+          "fault_family_id": "not_reaching_setpoint",
+          "question_text": "Is compressor running?",
+          "variable_name": "compressorRunning",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": true,
+          "display_order": 5,
+          "is_active": true
+        },
+        {
+          "id": "q_ns_6",
+          "fault_family_id": "not_reaching_setpoint",
+          "question_text": "Is capacity staging operating correctly?",
+          "variable_name": "stagingCorrect",
+          "input_type": "boolean",
+          "unit": "",
+          "is_required": false,
+          "display_order": 6,
+          "is_active": true
+        }
+      ],
+      "root_causes": [
+        {
+          "id": "ns_high_load",
+          "fault_family_id": "not_reaching_setpoint",
+          "cause_name": "Process load too high",
+          "description": "Actual heat load exceeds available cooling capacity.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ns_high_load",
+              "action_text": "Verify actual process heat load.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ns_high_load",
+              "action_text": "Compare load to unit capacity.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ns_high_load",
+              "action_text": "Reduce load or confirm unit sizing/staging.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "returnFluidTemp",
+              "operator": "gt",
+              "compare_value": "80",
+              "root_cause_id": "ns_high_load",
+              "weight": 6,
+              "explanation": "Very warm return fluid supports high process load.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "leavingFluidTemp",
+              "operator": "gt",
+              "compare_value": "setpoint_plus_5",
+              "root_cause_id": "ns_high_load",
+              "weight": 8,
+              "explanation": "Large gap above setpoint indicates the unit is falling behind load.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ns_low_flow",
+          "fault_family_id": "not_reaching_setpoint",
+          "cause_name": "Low process flow",
+          "description": "Poor heat transfer due to inadequate flow.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ns_low_flow",
+              "action_text": "Verify process flow and pump performance.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ns_low_flow",
+              "action_text": "Check for restrictions, air, or bypassing.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ns_low_flow",
+              "action_text": "Retest leaving and return temperatures after correction.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "flowConfirmed",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "ns_low_flow",
+              "weight": 8,
+              "explanation": "Missing flow strongly supports poor heat transfer.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "flowConfirmed",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "ns_low_flow",
+              "weight": -3,
+              "explanation": "Confirmed flow reduces low-flow explanation.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ns_no_cooling",
+          "fault_family_id": "not_reaching_setpoint",
+          "cause_name": "Compressor or cooling circuit unavailable",
+          "description": "Cooling not enabled or compressor not running.",
+          "severity": "high",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ns_no_cooling",
+              "action_text": "Confirm cooling enable and compressor status.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ns_no_cooling",
+              "action_text": "Check safety lockouts and interlocks.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ns_no_cooling",
+              "action_text": "Restore compressor operation before deeper performance checks.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "compressorRunning",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "ns_no_cooling",
+              "weight": 9,
+              "explanation": "If compressor is not running, no cooling is available.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "compressorRunning",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "ns_no_cooling",
+              "weight": -3,
+              "explanation": "Running compressor reduces primary no-cooling explanation.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ns_refrigeration_loss",
+          "fault_family_id": "not_reaching_setpoint",
+          "cause_name": "Refrigeration-side performance loss",
+          "description": "Low charge, fouled heat exchanger, or weak refrigeration performance.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ns_refrigeration_loss",
+              "action_text": "Check suction/discharge pattern, superheat, and subcooling.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ns_refrigeration_loss",
+              "action_text": "Inspect condenser/evaporator cleanliness.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ns_refrigeration_loss",
+              "action_text": "Check for low charge or compressor performance issues.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "compressorRunning",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "ns_refrigeration_loss",
+              "weight": 5,
+              "explanation": "If compressor runs but pull-down is poor, refrigeration performance loss remains possible.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ns_bad_staging",
+          "fault_family_id": "not_reaching_setpoint",
+          "cause_name": "Capacity staging / control issue",
+          "description": "Available capacity not staged correctly.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ns_bad_staging",
+              "action_text": "Verify stage enable logic and deadbands.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ns_bad_staging",
+              "action_text": "Check control outputs and stage transitions.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ns_bad_staging",
+              "action_text": "Correct staging sequence or control configuration.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "stagingCorrect",
+              "operator": "eq",
+              "compare_value": "no",
+              "root_cause_id": "ns_bad_staging",
+              "weight": 7,
+              "explanation": "Improper staging can strand available capacity.",
+              "is_active": true
+            },
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "stagingCorrect",
+              "operator": "eq",
+              "compare_value": "yes",
+              "root_cause_id": "ns_bad_staging",
+              "weight": -3,
+              "explanation": "Correct staging reduces control-stage explanation.",
+              "is_active": true
+            }
+          ]
+        },
+        {
+          "id": "ns_bad_measurement",
+          "fault_family_id": "not_reaching_setpoint",
+          "cause_name": "Sensor placement / reading issue",
+          "description": "Measured temperatures not representing true system condition.",
+          "severity": "medium",
+          "is_active": true,
+          "actions": [
+            {
+              "root_cause_id": "ns_bad_measurement",
+              "action_text": "Verify sensor locations and readings.",
+              "display_order": 1
+            },
+            {
+              "root_cause_id": "ns_bad_measurement",
+              "action_text": "Compare with handheld measurements.",
+              "display_order": 2
+            },
+            {
+              "root_cause_id": "ns_bad_measurement",
+              "action_text": "Correct sensor or interpretation issue before major repairs.",
+              "display_order": 3
+            }
+          ],
+          "scoring_rules": [
+            {
+              "fault_family_id": "not_reaching_setpoint",
+              "question_variable": "returnFluidTemp",
+              "operator": "lt",
+              "compare_value": "leaving_plus_2",
+              "root_cause_id": "ns_bad_measurement",
+              "weight": 5,
+              "explanation": "Very small delta-T may indicate bad measurement or weak heat transfer.",
+              "is_active": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
