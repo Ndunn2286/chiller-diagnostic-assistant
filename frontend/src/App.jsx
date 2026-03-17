@@ -456,14 +456,24 @@ async function handleAutoDiagnoseNote() {
             </section>
 
             <section className="card">
-              <div className="summary-header">
-                <h2>Service Summary</h2>
-                <button type="button" onClick={copySummary}>Copy Summary</button>
-              </div>
-              <textarea rows="16" value={serviceSummary} onChange={(e) => setServiceSummary(e.target.value)} />
-            </section><button type="button" onClick={handleDownloadPdf}>
-  Download PDF
-</button>
+  <div className="summary-header">
+    <h2>Service Summary</h2>
+    <div className="pill-row">
+      <button type="button" onClick={copySummary}>
+        Copy Summary
+      </button>
+      <button type="button" onClick={handleDownloadPdf}>
+        Download PDF
+      </button>
+    </div>
+  </div>
+
+  <textarea
+    rows="16"
+    value={serviceSummary}
+    onChange={(e) => setServiceSummary(e.target.value)}
+  />
+</section>
 
 
             <section className="card">
