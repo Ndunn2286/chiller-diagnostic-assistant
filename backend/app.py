@@ -62,7 +62,7 @@ OEM_ALIAS_LIBRARY = {
     ],
 }
 
-   FINGERPRINTS = [
+FINGERPRINTS = [
     {
         "id": "low_charge",
         "name": "Low Refrigerant Charge",
