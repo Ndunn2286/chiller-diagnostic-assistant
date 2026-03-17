@@ -322,13 +322,54 @@ async function handleAutoDiagnoseNote() {
                   <h3>Calculated Metrics</h3>
                   <ul>{Object.entries(matchResult.metrics || {}).map(([k, v]) => <li key={k}><strong>{k}</strong>: {String(v)}</li>)}</ul>
 
-                  <h3>Matched Fingerprints</h3>
-                  {(matchResult.fingerprints || []).length ? (
-                    <ul>{matchResult.fingerprints.map((fp) => <li key={fp.id}><strong>{fp.name}</strong><div className="muted small">{fp.likely_causes.join(", ")}</div></li>)}</ul>
-                  ) : <p className="muted">No hard fingerprint matched; using weighted best guess.</p>}
-                </>
-              )}
-            </div>
+                 <h3>Matched Fingerprints</h3>
+{(matchResult.fingerprints || []).length ? (
+  <div className="results">
+    {matchResult.fingerprints.map((fp) => (
+      <article key={fp.id} className="result-card">
+        <div className="result-header">
+          <h4>{fp.name}</h4>
+          <div className="pill-row">
+            <span className="pill">
+              Match {Math.round((fp.match_score || 0) * 100)}%
+            </span>
+          </div>
+        </div>
+
+        <div className="result-block">
+          <h5>Matched Conditions</h5>
+          <ul>
+            {fp.matched_conditions.map((cond, i) => (
+              <li key={i}>
+                {cond.field}: {String(cond.actual_value)} matched {cond.operator} {String(cond.target)}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="result-block">
+          <h5>Likely Causes</h5>
+          <ul>
+            {(fp.likely_causes || []).map((cause, i) => (
+              <li key={i}>{cause}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="result-block">
+          <h5>Next Checks</h5>
+          <ul>
+            {(fp.next_checks || []).map((check, i) => (
+              <li key={i}>{check}</li>
+            ))}
+          </ul>
+        </div>
+      </article>
+    ))}
+  </div>
+) : (
+  <p className="muted">No strong fingerprint matched; using weighted best guess.</p>
+)}
 
             <div className="card">
               <h2>Targeted Questions</h2>

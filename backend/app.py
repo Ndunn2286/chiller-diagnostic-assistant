@@ -57,55 +57,160 @@ OEM_ALIAS_LIBRARY = {
     ],
 }
 
-FINGERPRINTS = [
+   FINGERPRINTS = [
     {
         "id": "low_charge",
         "name": "Low Refrigerant Charge",
         "fault_family_id": "low_suction_low_charge",
-        "conditions": [("suction_pressure", "lt", 50), ("superheat", "gt", 20), ("subcooling", "lt", 5)],
-        "likely_causes": ["Low refrigerant charge", "Refrigerant leak", "Flashing liquid"],
+        "conditions": [
+            ("suction_pressure", "lt", 50),
+            ("superheat", "gt", 20),
+            ("subcooling", "lt", 5),
+        ],
+        "likely_causes": [
+            "Low refrigerant charge",
+            "Refrigerant leak",
+            "Flashing liquid",
+        ],
+        "next_checks": [
+            "Leak check the system",
+            "Inspect sight glass condition",
+            "Verify refrigerant charge",
+        ],
     },
     {
         "id": "liquid_line_restriction",
         "name": "Liquid Line Restriction",
         "fault_family_id": "low_suction_low_charge",
-        "conditions": [("suction_pressure", "lt", 50), ("superheat", "gt", 20), ("subcooling", "gt", 15)],
-        "likely_causes": ["Restricted liquid line", "Plugged filter drier", "Metering device restriction"],
+        "conditions": [
+            ("suction_pressure", "lt", 50),
+            ("superheat", "gt", 20),
+            ("subcooling", "gt", 15),
+        ],
+        "likely_causes": [
+            "Restricted liquid line",
+            "Plugged filter drier",
+            "Metering device restriction",
+        ],
+        "next_checks": [
+            "Check temperature drop across filter drier",
+            "Inspect liquid line restriction points",
+            "Verify metering device operation",
+        ],
     },
     {
         "id": "dirty_condenser",
-        "name": "Dirty Condenser / High Head",
+        "name": "Dirty Condenser / Airflow Problem",
         "fault_family_id": "high_head_pressure",
-        "conditions": [("discharge_pressure", "gt", 275), ("subcooling", "gt", 15)],
-        "likely_causes": ["Dirty condenser", "Airflow restriction", "Fan failure"],
+        "conditions": [
+            ("discharge_pressure", "gt", 275),
+            ("subcooling", "gt", 15),
+            ("superheat", "gte", 5),
+        ],
+        "likely_causes": [
+            "Dirty condenser",
+            "Airflow restriction",
+            "Condenser fan issue",
+        ],
+        "next_checks": [
+            "Inspect coil cleanliness",
+            "Verify condenser fan operation",
+            "Check for recirculating hot air",
+        ],
     },
     {
         "id": "overcharge",
         "name": "Overcharge / Backed-Up Liquid",
         "fault_family_id": "high_head_pressure",
-        "conditions": [("discharge_pressure", "gt", 275), ("subcooling", "gt", 20), ("superheat", "lt", 8)],
-        "likely_causes": ["System overcharged", "Liquid backed up in condenser"],
+        "conditions": [
+            ("discharge_pressure", "gt", 275),
+            ("subcooling", "gt", 20),
+            ("superheat", "lt", 10),
+        ],
+        "likely_causes": [
+            "System overcharged",
+            "Backed-up liquid in condenser",
+        ],
+        "next_checks": [
+            "Verify actual charge against factory target",
+            "Compare subcooling to expected range",
+            "Check condenser condition before removing charge",
+        ],
     },
     {
         "id": "flooded_evaporator",
-        "name": "Flooding / Overfeeding Evaporator",
+        "name": "Flooded / Overfeeding Evaporator",
         "fault_family_id": "low_suction_low_charge",
-        "conditions": [("superheat", "lt", 5), ("suction_pressure", "gte", 45)],
-        "likely_causes": ["Overfeeding metering device", "Floodback risk", "Bad control of evaporator feed"],
+        "conditions": [
+            ("superheat", "lt", 5),
+            ("suction_pressure", "gte", 45),
+        ],
+        "likely_causes": [
+            "Overfeeding metering device",
+            "Floodback risk",
+            "Poor evaporator feed control",
+        ],
+        "next_checks": [
+            "Verify superheat measurement",
+            "Inspect TXV/EEV behavior",
+            "Check for liquid floodback signs",
+        ],
     },
     {
         "id": "low_evap_flow",
         "name": "Low Evaporator Flow",
         "fault_family_id": "low_flow_pump_fault",
-        "conditions": [("flow_rate", "lt", 15), ("pump_amps", "lt", 1.5)],
-        "likely_causes": ["Pump loss of prime", "Air in system", "Flow restriction"],
+        "conditions": [
+            ("flow_rate", "lt", 15),
+            ("pump_amps", "lt", 1.5),
+        ],
+        "likely_causes": [
+            "Pump loss of prime",
+            "Air in system",
+            "Flow restriction",
+        ],
+        "next_checks": [
+            "Verify flow and pump differential",
+            "Check tank level and prime",
+            "Inspect strainers and valves",
+        ],
     },
     {
         "id": "freeze_risk_pattern",
         "name": "Freeze Risk",
         "fault_family_id": "freeze_risk",
-        "conditions": [("leaving_temp", "lte", 35), ("glycol_percent", "lt", 15)],
-        "likely_causes": ["Insufficient glycol concentration", "Aggressive operating temperature", "Freeze protection deficiency"],
+        "conditions": [
+            ("leaving_temp", "lte", 35),
+            ("glycol_percent", "lt", 15),
+        ],
+        "likely_causes": [
+            "Insufficient glycol concentration",
+            "Aggressive operating temperature",
+            "Freeze protection deficiency",
+        ],
+        "next_checks": [
+            "Test glycol concentration",
+            "Verify freeze setpoint",
+            "Check actual leaving fluid temperature",
+        ],
+    },
+    {
+        "id": "poor_pulldown",
+        "name": "Poor Pull-Down / Not Reaching Setpoint",
+        "fault_family_id": "not_reaching_setpoint",
+        "conditions": [
+            ("leaving_temp", "gt", 55),
+        ],
+        "likely_causes": [
+            "Insufficient cooling capacity",
+            "High process load",
+            "Low flow or refrigeration issue",
+        ],
+        "next_checks": [
+            "Compare leaving temp to setpoint",
+            "Check refrigeration circuit performance",
+            "Verify process load and flow",
+        ],
     },
 ]
 
@@ -201,21 +306,41 @@ def calculate_snapshot_metrics(req: SnapshotRequest) -> Dict[str, Any]:
 
 def detect_fingerprints(req: SnapshotRequest) -> list[Dict[str, Any]]:
     matched = []
+
     for fp in FINGERPRINTS:
         passed = []
+        total = len(fp["conditions"])
+
         for field, op, target in fp["conditions"]:
-            if _compare(getattr(req, field), op, target):
-                passed.append({"field": field, "operator": op, "target": target})
-        if len(passed) == len(fp["conditions"]):
+            value = getattr(req, field, None)
+            if _compare(value, op, target):
+                passed.append(
+                    {
+                        "field": field,
+                        "operator": op,
+                        "target": target,
+                        "actual_value": value,
+                    }
+                )
+
+        score = len(passed) / total if total else 0
+
+        if score >= 0.67:
             matched.append(
                 {
                     "id": fp["id"],
                     "name": fp["name"],
                     "fault_family_id": fp["fault_family_id"],
                     "matched_conditions": passed,
-                    "likely_causes": fp["likely_causes"],
+                    "matched_count": len(passed),
+                    "total_conditions": total,
+                    "match_score": round(score, 2),
+                    "likely_causes": fp.get("likely_causes", []),
+                    "next_checks": fp.get("next_checks", []),
                 }
             )
+
+    matched.sort(key=lambda x: x["match_score"], reverse=True)
     return matched
 
 def parse_tech_note(text: str) -> Dict[str, Any]:
@@ -359,6 +484,15 @@ def diagnose(req: DiagnoseRequest) -> Dict[str, Any]:
 def parse_note(req: TechNoteRequest) -> Dict[str, Any]:
     return {"extracted": parse_tech_note(req.note_text)}
 
+@app.get("/")
+def root():
+    return {
+        "app": "Chiller Diagnostic API",
+        "status": "running",
+        "version": "1.0"
+    }
+
+
 @app.post("/auto-diagnose-note")
 def auto_diagnose_note(req: AutoDiagnoseNoteRequest) -> Dict[str, Any]:
     extracted = parse_tech_note(req.note_text)
@@ -430,10 +564,12 @@ def snapshot_match(req: SnapshotRequest) -> Dict[str, Any]:
     metrics = calculate_snapshot_metrics(req)
     fingerprints = detect_fingerprints(req)
 
-    for fp in fingerprints:
-        scores[fp["fault_family_id"]] += 8
-        reasons[fp["fault_family_id"]].append(f'Fingerprint matched: {fp["name"]}')
-
+   for fp in fingerprints:
+    points = int(fp["match_score"] * 10)
+    scores[fp["fault_family_id"]] += points
+    reasons[fp["fault_family_id"]].append(
+        f'Fingerprint matched: {fp["name"]} ({fp["matched_count"]}/{fp["total_conditions"]} conditions)'
+    )
     if req.suction_pressure is not None and req.suction_pressure < 50:
         scores["low_suction_low_charge"] += 4
         reasons["low_suction_low_charge"].append("Low suction pressure suggests starved evaporator or low charge.")
