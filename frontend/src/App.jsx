@@ -102,6 +102,43 @@ export default function App() {
     return data;
   }
 
+async function handleDownloadPdf() {
+  try {
+    const payload = {
+      technician_notes: techNote,
+      matched_fault_family: matchResult?.fault_family_name || "",
+      snapshot_values: snapshotValues,
+      metrics: matchResult?.metrics || {},
+      diagnosis_results: diagnosis?.results || [],
+      service_summary: serviceSummary,
+    };
+
+    const res = await fetch(`${API_BASE}/generate-pdf-report`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to generate PDF report");
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "chiller_service_report.pdf";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    setError(err.message || "PDF generation failed");
+  }
+}
+
   async function handleMatchAlarm(e) {
     e.preventDefault();
     setLoading(true); setError(""); setDiagnosis(null); setServiceSummary("");
@@ -424,7 +461,10 @@ async function handleAutoDiagnoseNote() {
                 <button type="button" onClick={copySummary}>Copy Summary</button>
               </div>
               <textarea rows="16" value={serviceSummary} onChange={(e) => setServiceSummary(e.target.value)} />
-            </section>
+            </section><button type="button" onClick={handleDownloadPdf}>
+  Download PDF
+</button>
+
 
             <section className="card">
               <h2>Feedback Capture</h2>

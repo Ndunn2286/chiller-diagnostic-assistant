@@ -6,6 +6,11 @@ import re
 import json
 from datetime import datetime
 
+
+from fastapi.responses import StreamingResponse
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -217,6 +222,14 @@ OEM_ALIAS_LIBRARY = {
 class AlarmRequest(BaseModel):
     alarm_text: str
 
+class PdfReportRequest(BaseModel):
+    technician_notes: str | None = None
+    matched_fault_family: str | None = None
+    snapshot_values: Dict[str, Any] | None = None
+    metrics: Dict[str, Any] | None = None
+    diagnosis_results: list[Dict[str, Any]] | None = None
+    service_summary: str | None = None
+
 class DiagnoseRequest(BaseModel):
     fault_family_id: str
     answers: Dict[str, Any]
@@ -262,6 +275,77 @@ class AutoDiagnoseNoteRequest(BaseModel):
 
 def _confidence(score: int) -> str:
     return "High" if score >= 10 else "Medium" if score >= 6 else "Low"
+
+def build_pdf_report(data: PdfReportRequest) -> BytesIO:
+    buffer = BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    y = height - 50
+
+    def write_line(text: str, size: int = 11, indent: int = 0):
+        nonlocal y
+        if y < 60:
+            pdf.showPage()
+            y = height - 50
+        pdf.setFont("Helvetica", size)
+        pdf.drawString(50 + indent, y, text[:110])
+        y -= 16
+
+    pdf.setTitle("Chiller Service Report")
+
+    write_line("Chiller Service Report", 16)
+    write_line("")
+
+    write_line("Matched Fault Family:", 12)
+    write_line(data.matched_fault_family or "N/A", 11, 20)
+    write_line("")
+
+    write_line("Technician Notes:", 12)
+    if data.technician_notes:
+        for line in data.technician_notes.splitlines():
+            write_line(line, 11, 20)
+    else:
+        write_line("N/A", 11, 20)
+    write_line("")
+
+    write_line("Snapshot Values:", 12)
+    if data.snapshot_values:
+        for k, v in data.snapshot_values.items():
+            write_line(f"{k}: {v}", 11, 20)
+    else:
+        write_line("N/A", 11, 20)
+    write_line("")
+
+    write_line("Calculated Metrics:", 12)
+    if data.metrics:
+        for k, v in data.metrics.items():
+            write_line(f"{k}: {v}", 11, 20)
+    else:
+        write_line("N/A", 11, 20)
+    write_line("")
+
+    write_line("Diagnosis Results:", 12)
+    if data.diagnosis_results:
+        for idx, result in enumerate(data.diagnosis_results, start=1):
+            write_line(f"{idx}. {result.get('cause_name', 'Unknown')} ({result.get('confidence', 'N/A')})", 11, 20)
+            write_line(f"Score: {result.get('score', 'N/A')}", 11, 40)
+            for action in result.get("actions", []):
+                write_line(f"- {action}", 11, 40)
+    else:
+        write_line("N/A", 11, 20)
+    write_line("")
+
+    write_line("Service Summary:", 12)
+    if data.service_summary:
+        for line in data.service_summary.splitlines():
+            write_line(line, 11, 20)
+    else:
+        write_line("N/A", 11, 20)
+
+    pdf.save()
+    buffer.seek(0)
+    return buffer
 
 def _compare(value: float | None, operator: str, target: float) -> bool:
     if value is None:
@@ -472,6 +556,15 @@ def match_alarm(req: AlarmRequest) -> Dict[str, Any]:
         "matches": matches,
         "questions": questions,
     }
+
+@app.post("/generate-pdf-report")
+def generate_pdf_report(req: PdfReportRequest):
+    pdf_buffer = build_pdf_report(req)
+    return StreamingResponse(
+        pdf_buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "attachment; filename=chiller_service_report.pdf"},
+    )
 
 @app.post("/diagnose")
 def diagnose(req: DiagnoseRequest) -> Dict[str, Any]:
