@@ -5,7 +5,9 @@ from typing import Any, Dict
 import re
 import json
 from datetime import datetime
-
+import os
+import json
+from openai import OpenAI
 
 from fastapi.responses import StreamingResponse
 from io import BytesIO
@@ -16,6 +18,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from chiller_rules_engine import load_seed, find_family, diagnose_family
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 BASE_DIR = Path(__file__).resolve().parent
 SEED_PATH = BASE_DIR / "chiller_diagnostic_seed_first5.json"
@@ -218,6 +222,14 @@ FINGERPRINTS = [
         ],
     },
 ]
+
+class AITechNoteRequest(BaseModel):
+    note_text: str
+
+class AITechNoteResponse(BaseModel):
+    extracted: Dict[str, Any]
+    ai_summary: str
+    ai_suspected_condition: str | None = None
 
 class AlarmRequest(BaseModel):
     alarm_text: str
@@ -531,6 +543,70 @@ def _load_feedback() -> list[Dict[str, Any]]:
     except Exception:
         return []
 
+def ai_extract_tech_note(note_text: str) -> Dict[str, Any]:
+    schema = {
+        "type": "object",
+        "properties": {
+            "suction_pressure": {"type": ["number", "null"]},
+            "discharge_pressure": {"type": ["number", "null"]},
+            "superheat": {"type": ["number", "null"]},
+            "subcooling": {"type": ["number", "null"]},
+            "leaving_temp": {"type": ["number", "null"]},
+            "return_temp": {"type": ["number", "null"]},
+            "flow_rate": {"type": ["number", "null"]},
+            "pump_amps": {"type": ["number", "null"]},
+            "ambient_temp": {"type": ["number", "null"]},
+            "glycol_percent": {"type": ["number", "null"]},
+            "flow_confirmed": {"type": ["string", "null"]},
+            "fans_running": {"type": ["string", "null"]},
+            "compressor_running": {"type": ["string", "null"]},
+            "suspected_condition": {"type": ["string", "null"]},
+            "summary": {"type": "string"},
+        },
+        "required": ["summary"],
+        "additionalProperties": False,
+    }
+
+    response = client.responses.create(
+        model="gpt-5.4-mini",
+        input=[
+            {
+                "role": "system",
+                "content": (
+                    "You are an expert industrial chiller technician. "
+                    "Extract values from technician notes. "
+                    "Return only structured JSON."
+                ),
+            },
+            {
+                "role": "user",
+                "content": f"""
+Extract any chiller diagnostic values from this note.
+
+Rules:
+- Pressures should be numeric if found
+- Temps should be numeric if found
+- yes/no states should be 'yes' or 'no'
+- If a value is not present, use null
+- Also provide a short suspected_condition and a one-paragraph summary
+
+Technician note:
+{note_text}
+""",
+            },
+        ],
+        text={
+            "format": {
+                "type": "json_schema",
+                "name": "tech_note_extract",
+                "schema": schema,
+                "strict": True,
+            }
+        },
+    )
+
+    return json.loads(response.output_text)
+
 def _save_feedback(data: list[Dict[str, Any]]) -> None:
     FEEDBACK_PATH.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
@@ -555,6 +631,43 @@ def match_alarm(req: AlarmRequest) -> Dict[str, Any]:
         "description": family.get("description", ""),
         "matches": matches,
         "questions": questions,
+    }
+
+@app.post("/ai-tech-note-diagnosis")
+def ai_tech_note_diagnosis(req: AITechNoteRequest) -> Dict[str, Any]:
+    ai_data = ai_extract_tech_note(req.note_text)
+
+    extracted = {
+        k: v for k, v in ai_data.items()
+        if k not in {"summary", "suspected_condition"}
+    }
+
+    snapshot_req = SnapshotRequest(**extracted)
+    snapshot_result = snapshot_match(snapshot_req)
+
+    family = next(
+        (f for f in seed["fault_families"] if f["id"] == snapshot_result["fault_family_id"]),
+        None,
+    )
+    if not family:
+        raise HTTPException(status_code=404, detail="Fault family not found.")
+
+    auto_answers = {}
+    for q in family.get("questions", []):
+        var = q["variable_name"]
+        if var in extracted and extracted[var] is not None:
+            auto_answers[var] = extracted[var]
+
+    diagnosis = diagnose_family(family, auto_answers)
+
+    return {
+        "note_text": req.note_text,
+        "extracted": extracted,
+        "ai_summary": ai_data.get("summary", ""),
+        "ai_suspected_condition": ai_data.get("suspected_condition"),
+        "snapshot_match": snapshot_result,
+        "auto_answers": auto_answers,
+        "diagnosis": diagnosis,
     }
 
 @app.post("/generate-pdf-report")

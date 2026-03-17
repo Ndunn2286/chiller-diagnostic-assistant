@@ -232,6 +232,44 @@ async function handleAutoDiagnoseNote() {
     finally { setLoading(false); }
   }
 
+async function handleAITechNoteDiagnosis() {
+  setLoading(true);
+  setError("");
+
+  try {
+    const res = await fetch(`${API_BASE}/ai-tech-note-diagnosis`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ note_text: techNote }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "AI diagnosis failed");
+
+    setSnapshotValues(data.extracted);
+    setMatchResult(data.snapshot_match);
+    setDiagnosis(data.diagnosis);
+    setNoteDiagnosis(data);
+
+    setServiceSummary(
+      buildServiceSummary(
+        data.snapshot_match,
+        data.diagnosis,
+        data.auto_answers,
+        data.extracted,
+        data.snapshot_match.metrics,
+        techNote
+      )
+    );
+  } catch (err) {
+    setError(err.message || "Something went wrong.");
+  } finally {
+    setLoading(false);
+  }
+}
+
   async function handleSaveFeedback() {
     setLoading(true); setError(""); setFeedbackStatus("");
     try {
@@ -853,4 +891,11 @@ async function handleAutoDiagnoseNote() {
               </div>
     </div>
   );
-}
+}<button
+  type="button"
+  onClick={handleAITechNoteDiagnosis}
+  disabled={loading || !techNote.trim()}
+>
+  AI Diagnose Tech Note
+</button>
+
