@@ -334,7 +334,7 @@ async function handleAutoDiagnoseNote() {
         {error ? <section className="card error"><strong>Error:</strong> {error}</section> : null}
         {feedbackStatus ? <section className="card success">{feedbackStatus}</section> : null}
 
-        {matchResult ? (
+                {matchResult ? (
           <section className="grid">
             <div className="card">
               <h2>Matched Fault Family</h2>
@@ -344,69 +344,96 @@ async function handleAutoDiagnoseNote() {
               {matchResult.mode === "alarm" ? (
                 <>
                   <h3>Top Alias Matches</h3>
-                  <ul>{matchResult.matches.map((match, index) => <li key={`${match.alias_text}-${index}`}><strong>{match.alias_text}</strong> <span className="muted">(score {match.score})</span></li>)}</ul>
+                  <ul>
+                    {matchResult.matches.map((match, index) => (
+                      <li key={`${match.alias_text}-${index}`}>
+                        <strong>{match.alias_text}</strong>{" "}
+                        <span className="muted">(score {match.score})</span>
+                      </li>
+                    ))}
+                  </ul>
                 </>
               ) : matchResult.mode === "guided" ? (
                 <>
                   <h3>Why it routed here</h3>
-                  <ul>{(matchResult.why || []).map((line, index) => <li key={index}>{line}</li>)}</ul>
+                  <ul>
+                    {(matchResult.why || []).map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
                 </>
               ) : (
                 <>
                   <h3>Why this family matched</h3>
-                  <ul>{(matchResult.why_matched || []).map((line, index) => <li key={index}>{line}</li>)}</ul>
+                  <ul>
+                    {(matchResult.why_matched || []).map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
 
                   <h3>Calculated Metrics</h3>
-                  <ul>{Object.entries(matchResult.metrics || {}).map(([k, v]) => <li key={k}><strong>{k}</strong>: {String(v)}</li>)}</ul>
+                  <ul>
+                    {Object.entries(matchResult.metrics || {}).map(([k, v]) => (
+                      <li key={k}>
+                        <strong>{k}</strong>: {String(v)}
+                      </li>
+                    ))}
+                  </ul>
 
-                 <h3>Matched Fingerprints</h3>
-{(matchResult.fingerprints || []).length ? (
-  <div className="results">
-    {matchResult.fingerprints.map((fp) => (
-      <article key={fp.id} className="result-card">
-        <div className="result-header">
-          <h4>{fp.name}</h4>
-          <div className="pill-row">
-            <span className="pill">
-              Match {Math.round((fp.match_score || 0) * 100)}%
-            </span>
-          </div>
-        </div>
+                  <h3>Matched Fingerprints</h3>
+                  {(matchResult.fingerprints || []).length ? (
+                    <div className="results">
+                      {matchResult.fingerprints.map((fp) => (
+                        <article key={fp.id} className="result-card">
+                          <div className="result-header">
+                            <h4>{fp.name}</h4>
+                            <div className="pill-row">
+                              <span className="pill">
+                                Match {Math.round((fp.match_score || 0) * 100)}%
+                              </span>
+                            </div>
+                          </div>
 
-        <div className="result-block">
-          <h5>Matched Conditions</h5>
-          <ul>
-            {fp.matched_conditions.map((cond, i) => (
-              <li key={i}>
-                {cond.field}: {String(cond.actual_value)} matched {cond.operator} {String(cond.target)}
-              </li>
-            ))}
-          </ul>
-        </div>
+                          <div className="result-block">
+                            <h5>Matched Conditions</h5>
+                            <ul>
+                              {fp.matched_conditions.map((cond, i) => (
+                                <li key={i}>
+                                  {cond.field}: {String(cond.actual_value)} matched{" "}
+                                  {cond.operator} {String(cond.target)}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
 
-        <div className="result-block">
-          <h5>Likely Causes</h5>
-          <ul>
-            {(fp.likely_causes || []).map((cause, i) => (
-              <li key={i}>{cause}</li>
-            ))}
-          </ul>
-        </div>
+                          <div className="result-block">
+                            <h5>Likely Causes</h5>
+                            <ul>
+                              {(fp.likely_causes || []).map((cause, i) => (
+                                <li key={i}>{cause}</li>
+                              ))}
+                            </ul>
+                          </div>
 
-        <div className="result-block">
-          <h5>Next Checks</h5>
-          <ul>
-            {(fp.next_checks || []).map((check, i) => (
-              <li key={i}>{check}</li>
-            ))}
-          </ul>
-        </div>
-      </article>
-    ))}
-  </div>
-) : (
-  <p className="muted">No strong fingerprint matched; using weighted best guess.</p>
-)}
+                          <div className="result-block">
+                            <h5>Next Checks</h5>
+                            <ul>
+                              {(fp.next_checks || []).map((check, i) => (
+                                <li key={i}>{check}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="muted">
+                      No strong fingerprint matched; using weighted best guess.
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
 
             <div className="card">
               <h2>Targeted Questions</h2>
@@ -414,13 +441,29 @@ async function handleAutoDiagnoseNote() {
                 <form onSubmit={handleDiagnose} className="stack">
                   {matchResult.questions.map((q) => (
                     <label key={q.id} className="field">
-                      <span>{q.question_text}{q.unit ? ` (${q.unit})` : ""}{q.is_required ? " *" : ""}</span>
-                      {questionInput(q, answers[q.variable_name] ?? "", (value) => setAnswers((prev) => ({ ...prev, [q.variable_name]: value })))}
+                      <span>
+                        {q.question_text}
+                        {q.unit ? ` (${q.unit})` : ""}
+                        {q.is_required ? " *" : ""}
+                      </span>
+                      {questionInput(
+                        q,
+                        answers[q.variable_name] ?? "",
+                        (value) =>
+                          setAnswers((prev) => ({
+                            ...prev,
+                            [q.variable_name]: value,
+                          }))
+                      )}
                     </label>
                   ))}
-                  <button type="submit" disabled={loading}>{loading ? "Diagnosing..." : "Diagnose"}</button>
+                  <button type="submit" disabled={loading}>
+                    {loading ? "Diagnosing..." : "Diagnose"}
+                  </button>
                 </form>
-              ) : <p>No questions available for this fault family.</p>}
+              ) : (
+                <p>No questions available for this fault family.</p>
+              )}
             </div>
           </section>
         ) : null}
@@ -428,92 +471,386 @@ async function handleAutoDiagnoseNote() {
         {diagnosis ? (
           <>
             <section className="card">
-  <h2>Results</h2>
-  <p className="family-name">{diagnosis.family_name}</p>
+              <h2>Results</h2>
+              <p className="family-name">{diagnosis.family_name}</p>
 
-  {diagnosis.results.length ? (
-    <div className="results">
-      {diagnosis.results.map((result, index) => (
-        <article key={result.root_cause_id} className="result-card">
-          <div className="result-header">
-            <h3>{index + 1}. {result.cause_name}</h3>
-            <div className="pill-row">
-              <span className="pill">Score {result.score}</span>
-              <span className="pill">{result.confidence}</span>
-            </div>
-          </div>
+              {diagnosis.results.length ? (
+                <div className="results">
+                  {diagnosis.results.map((result, index) => (
+                    <article key={result.root_cause_id} className="result-card">
+                      <div className="result-header">
+                        <h3>
+                          {index + 1}. {result.cause_name}
+                        </h3>
+                        <div className="pill-row">
+                          <span className="pill">Score {result.score}</span>
+                          <span className="pill">{result.confidence}</span>
+                        </div>
+                      </div>
 
-          <div className="result-block">
-            <h4>Why it ranked this way</h4>
-            <ul>
-              {result.why.map((line, i) => (
-                <li key={i}>{line}</li>
-              ))}
-            </ul>
-          </div>
+                      <div className="result-block">
+                        <h4>Why it ranked this way</h4>
+                        <ul>
+                          {result.why.map((line, i) => (
+                            <li key={i}>{line}</li>
+                          ))}
+                        </ul>
+                      </div>
 
-          <div className="result-block">
-            <h4>Recommended actions</h4>
-            <ul>
-              {result.actions.map((action, i) => (
-                <li key={i}>{action}</li>
-              ))}
-            </ul>
-          </div>
-        </article>
-      ))}
-    </div>
-  ) : (
-    <p>No root causes scored above zero with the current answers.</p>
-  )}
-</section>
+                      <div className="result-block">
+                        <h4>Recommended actions</h4>
+                        <ul>
+                          {result.actions.map((action, i) => (
+                            <li key={i}>{action}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <p>No root causes scored above zero with the current answers.</p>
+              )}
+            </section>
 
             <section className="card">
-  <div className="summary-header">
-    <h2>Service Summary</h2>
-    <div className="pill-row">
-      <button type="button" onClick={copySummary}>
-        Copy Summary
-      </button>
-      <button type="button" onClick={handleDownloadPdf}>
-        Download PDF
-      </button>
-    </div>
-  </div>
+              <div className="summary-header">
+                <h2>Service Summary</h2>
+                <div className="pill-row">
+                  <button type="button" onClick={copySummary}>
+                    Copy Summary
+                  </button>
+                  <button type="button" onClick={handleDownloadPdf}>
+                    Download PDF
+                  </button>
+                </div>
+              </div>
 
-  <textarea
-    rows="16"
-    value={serviceSummary}
-    onChange={(e) => setServiceSummary(e.target.value)}
-  />
-</section>
-
+              <textarea
+                rows="16"
+                value={serviceSummary}
+                onChange={(e) => setServiceSummary(e.target.value)}
+              />
+            </section>
 
             <section className="card">
               <h2>Feedback Capture</h2>
               <div className="stack">
                 <label className="field">
                   <span>Actual Root Cause</span>
-                  <input type="text" value={feedbackForm.actual_root_cause} onChange={(e) => setFeedbackForm((prev) => ({ ...prev, actual_root_cause: e.target.value }))} placeholder="What was the real cause?" />
+                  <input
+                    type="text"
+                    value={feedbackForm.actual_root_cause}
+                    onChange={(e) =>
+                      setFeedbackForm((prev) => ({
+                        ...prev,
+                        actual_root_cause: e.target.value,
+                      }))
+                    }
+                    placeholder="What was the real cause?"
+                  />
                 </label>
+
                 <label className="field">
                   <span>Was the top prediction correct?</span>
-                  <select value={feedbackForm.was_prediction_correct} onChange={(e) => setFeedbackForm((prev) => ({ ...prev, was_prediction_correct: e.target.value }))}>
-                    <option value="yes">Yes</option><option value="no">No</option>
+                  <select
+                    value={feedbackForm.was_prediction_correct}
+                    onChange={(e) =>
+                      setFeedbackForm((prev) => ({
+                        ...prev,
+                        was_prediction_correct: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
                   </select>
                 </label>
+
                 <label className="field">
                   <span>Technician Notes</span>
-                  <textarea rows="4" value={feedbackForm.technician_notes} onChange={(e) => setFeedbackForm((prev) => ({ ...prev, technician_notes: e.target.value }))} />
+                  <textarea
+                    rows="4"
+                    value={feedbackForm.technician_notes}
+                    onChange={(e) =>
+                      setFeedbackForm((prev) => ({
+                        ...prev,
+                        technician_notes: e.target.value,
+                      }))
+                    }
+                  />
                 </label>
-                <button type="button" onClick={handleSaveFeedback} disabled={loading || !feedbackForm.actual_root_cause.trim()}>
+
+                <button
+                  type="button"
+                  onClick={handleSaveFeedback}
+                  disabled={loading || !feedbackForm.actual_root_cause.trim()}
+                >
                   {loading ? "Saving..." : "Save Feedback"}
                 </button>
               </div>
             </section>
           </>
         ) : null}
-      </div>
+                {matchResult ? (
+          <section className="grid">
+            <div className="card">
+              <h2>Matched Fault Family</h2>
+              <p className="family-name">{matchResult.fault_family_name}</p>
+              <p>{matchResult.description}</p>
+
+              {matchResult.mode === "alarm" ? (
+                <>
+                  <h3>Top Alias Matches</h3>
+                  <ul>
+                    {matchResult.matches.map((match, index) => (
+                      <li key={`${match.alias_text}-${index}`}>
+                        <strong>{match.alias_text}</strong>{" "}
+                        <span className="muted">(score {match.score})</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : matchResult.mode === "guided" ? (
+                <>
+                  <h3>Why it routed here</h3>
+                  <ul>
+                    {(matchResult.why || []).map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <h3>Why this family matched</h3>
+                  <ul>
+                    {(matchResult.why_matched || []).map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
+
+                  <h3>Calculated Metrics</h3>
+                  <ul>
+                    {Object.entries(matchResult.metrics || {}).map(([k, v]) => (
+                      <li key={k}>
+                        <strong>{k}</strong>: {String(v)}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <h3>Matched Fingerprints</h3>
+                  {(matchResult.fingerprints || []).length ? (
+                    <div className="results">
+                      {matchResult.fingerprints.map((fp) => (
+                        <article key={fp.id} className="result-card">
+                          <div className="result-header">
+                            <h4>{fp.name}</h4>
+                            <div className="pill-row">
+                              <span className="pill">
+                                Match {Math.round((fp.match_score || 0) * 100)}%
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="result-block">
+                            <h5>Matched Conditions</h5>
+                            <ul>
+                              {fp.matched_conditions.map((cond, i) => (
+                                <li key={i}>
+                                  {cond.field}: {String(cond.actual_value)} matched{" "}
+                                  {cond.operator} {String(cond.target)}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="result-block">
+                            <h5>Likely Causes</h5>
+                            <ul>
+                              {(fp.likely_causes || []).map((cause, i) => (
+                                <li key={i}>{cause}</li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="result-block">
+                            <h5>Next Checks</h5>
+                            <ul>
+                              {(fp.next_checks || []).map((check, i) => (
+                                <li key={i}>{check}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="muted">
+                      No strong fingerprint matched; using weighted best guess.
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="card">
+              <h2>Targeted Questions</h2>
+              {canDiagnose ? (
+                <form onSubmit={handleDiagnose} className="stack">
+                  {matchResult.questions.map((q) => (
+                    <label key={q.id} className="field">
+                      <span>
+                        {q.question_text}
+                        {q.unit ? ` (${q.unit})` : ""}
+                        {q.is_required ? " *" : ""}
+                      </span>
+                      {questionInput(
+                        q,
+                        answers[q.variable_name] ?? "",
+                        (value) =>
+                          setAnswers((prev) => ({
+                            ...prev,
+                            [q.variable_name]: value,
+                          }))
+                      )}
+                    </label>
+                  ))}
+                  <button type="submit" disabled={loading}>
+                    {loading ? "Diagnosing..." : "Diagnose"}
+                  </button>
+                </form>
+              ) : (
+                <p>No questions available for this fault family.</p>
+              )}
+            </div>
+          </section>
+        ) : null}
+
+        {diagnosis ? (
+          <>
+            <section className="card">
+              <h2>Results</h2>
+              <p className="family-name">{diagnosis.family_name}</p>
+
+              {diagnosis.results.length ? (
+                <div className="results">
+                  {diagnosis.results.map((result, index) => (
+                    <article key={result.root_cause_id} className="result-card">
+                      <div className="result-header">
+                        <h3>
+                          {index + 1}. {result.cause_name}
+                        </h3>
+                        <div className="pill-row">
+                          <span className="pill">Score {result.score}</span>
+                          <span className="pill">{result.confidence}</span>
+                        </div>
+                      </div>
+
+                      <div className="result-block">
+                        <h4>Why it ranked this way</h4>
+                        <ul>
+                          {result.why.map((line, i) => (
+                            <li key={i}>{line}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="result-block">
+                        <h4>Recommended actions</h4>
+                        <ul>
+                          {result.actions.map((action, i) => (
+                            <li key={i}>{action}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <p>No root causes scored above zero with the current answers.</p>
+              )}
+            </section>
+
+            <section className="card">
+              <div className="summary-header">
+                <h2>Service Summary</h2>
+                <div className="pill-row">
+                  <button type="button" onClick={copySummary}>
+                    Copy Summary
+                  </button>
+                  <button type="button" onClick={handleDownloadPdf}>
+                    Download PDF
+                  </button>
+                </div>
+              </div>
+
+              <textarea
+                rows="16"
+                value={serviceSummary}
+                onChange={(e) => setServiceSummary(e.target.value)}
+              />
+            </section>
+
+            <section className="card">
+              <h2>Feedback Capture</h2>
+              <div className="stack">
+                <label className="field">
+                  <span>Actual Root Cause</span>
+                  <input
+                    type="text"
+                    value={feedbackForm.actual_root_cause}
+                    onChange={(e) =>
+                      setFeedbackForm((prev) => ({
+                        ...prev,
+                        actual_root_cause: e.target.value,
+                      }))
+                    }
+                    placeholder="What was the real cause?"
+                  />
+                </label>
+
+                <label className="field">
+                  <span>Was the top prediction correct?</span>
+                  <select
+                    value={feedbackForm.was_prediction_correct}
+                    onChange={(e) =>
+                      setFeedbackForm((prev) => ({
+                        ...prev,
+                        was_prediction_correct: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </label>
+
+                <label className="field">
+                  <span>Technician Notes</span>
+                  <textarea
+                    rows="4"
+                    value={feedbackForm.technician_notes}
+                    onChange={(e) =>
+                      setFeedbackForm((prev) => ({
+                        ...prev,
+                        technician_notes: e.target.value,
+                      }))
+                    }
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  onClick={handleSaveFeedback}
+                  disabled={loading || !feedbackForm.actual_root_cause.trim()}
+                >
+                  {loading ? "Saving..." : "Save Feedback"}
+                </button>
+              </div>
+            </section>
+          </>
+        ) : null}
+              </div>
     </div>
   );
 }
