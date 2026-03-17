@@ -428,32 +428,45 @@ async function handleAutoDiagnoseNote() {
         {diagnosis ? (
           <>
             <section className="card">
-              <h2>Results</h2>
-              <p className="family-name">{diagnosis.family_name}</p>
-              {diagnosis.results.length ? (
-                <div className="results">
-                  {diagnosis.results.map((result, index) => (
-                    <article key={result.root_cause_id} className="result-card">
-                      <div className="result-header">
-                        <h3>{index + 1}. {result.cause_name}</h3>
-                        <div className="pill-row">
-                          <span className="pill">Score {result.score}</span>
-                          <span className="pill">{result.confidence}</span>
-                        </div>
-                      </div>
-                      <div className="result-block">
-                        <h4>Why it ranked this way</h4>
-                        <ul>{result.why.map((line, i) => <li key={i}>{line}</li>)}</ul>
-                      </div>
-                      <div className="result-block">
-                        <h4>Recommended actions</h4>
-                        <ul>{result.actions.map((action, i) => <li key={i}>{action}</li>)}</ul>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              ) : <p>No root causes scored above zero with the current answers.</p>}
-            </section>
+  <h2>Results</h2>
+  <p className="family-name">{diagnosis.family_name}</p>
+
+  {diagnosis.results.length ? (
+    <div className="results">
+      {diagnosis.results.map((result, index) => (
+        <article key={result.root_cause_id} className="result-card">
+          <div className="result-header">
+            <h3>{index + 1}. {result.cause_name}</h3>
+            <div className="pill-row">
+              <span className="pill">Score {result.score}</span>
+              <span className="pill">{result.confidence}</span>
+            </div>
+          </div>
+
+          <div className="result-block">
+            <h4>Why it ranked this way</h4>
+            <ul>
+              {result.why.map((line, i) => (
+                <li key={i}>{line}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="result-block">
+            <h4>Recommended actions</h4>
+            <ul>
+              {result.actions.map((action, i) => (
+                <li key={i}>{action}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <p>No root causes scored above zero with the current answers.</p>
+  )}
+</section>
 
             <section className="card">
   <div className="summary-header">
